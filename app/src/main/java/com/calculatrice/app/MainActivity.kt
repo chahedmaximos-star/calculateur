@@ -125,4 +125,14 @@ class MainActivity : AppCompatActivity() {
         currentInput = (v / 100).toString()
         tvResult.text = currentInput
     }
+    override fun onResume() {
+    super.onResume()
+    secretCode = ""
+    currentInput = ""
+    firstOperand = ""
+    operator = ""
+    tvResult.text = "0"
+    tvExpression.text = ""
+    newInput = true
+}
 }
