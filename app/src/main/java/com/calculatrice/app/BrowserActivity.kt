@@ -1,4 +1,4 @@
-package com.calculatrice.app
+package com.calculatrice.app  // أو com.calendrier.app
 
 import android.annotation.SuppressLint
 import android.app.ActivityManager
@@ -24,7 +24,6 @@ class BrowserActivity : AppCompatActivity() {
 
     private val tabs = mutableListOf<Tab>()
     private var currentTab = 0
-
     private var backPressCount = 0
     private var lastBackPressTime = 0L
 
@@ -70,6 +69,7 @@ class BrowserActivity : AppCompatActivity() {
             setSupportZoom(true)
             builtInZoomControls = true
             displayZoomControls = false
+            savePassword = true
             userAgentString = "Mozilla/5.0 (Linux; Android 10; Mobile) AppleWebKit/537.36 Chrome/120.0 Mobile Safari/537.36"
         }
         CookieManager.getInstance().apply {
@@ -171,15 +171,14 @@ class BrowserActivity : AppCompatActivity() {
     }
 
     private fun hideApp() {
+        getSharedPreferences("prefs", MODE_PRIVATE)
+            .edit().putBoolean("browser_open", false).apply()
+        CookieManager.getInstance().flush()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val am = getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
             am.appTasks.firstOrNull()?.setExcludeFromRecents(true)
         }
-        startActivity(Intent(Intent.ACTION_MAIN).apply {
-            addCategory(Intent.CATEGORY_HOME)
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        })
-        finish()
+        moveTaskToBack(true)
     }
 
     @Deprecated("Deprecated in Java")
